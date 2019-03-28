@@ -1,14 +1,12 @@
 package com.example.loginfirebase;
 
 import android.content.DialogInterface;
-import android.preference.DialogPreference;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +17,7 @@ import com.firebase.ui.database.SnapshotParser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 
 public class ViewPosts extends AppCompatActivity {
 
@@ -69,7 +64,6 @@ public class ViewPosts extends AppCompatActivity {
         adapter = new FirebaseRecyclerAdapter<Model, ViewHolder>(options) {
                     @Override
                     protected void onBindViewHolder(@NonNull ViewHolder holder, final int position, @NonNull Model model) {
-//                        Log.d("dddddd", model.getTitle()+" title "+model.getImage()+" image ");
                         holder.mTitleView.setText(model.getTitle());
                         holder.mImageView.setBackgroundColor(0);
                         Picasso.get().load(model.getImage()).placeholder(R.drawable.loadingimage).into(holder.mImageView);

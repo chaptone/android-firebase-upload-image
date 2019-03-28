@@ -3,6 +3,7 @@
     package="com.example.loginfirebase">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ViewPosts"></activity>
+        <activity android:name=".ViewLocation"></activity>
+        <activity android:name=".ViewPosts" />
         <activity android:name=".NewPost" />
         <activity
             android:name=".SignIn"
