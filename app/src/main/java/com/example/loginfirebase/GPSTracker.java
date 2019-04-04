@@ -34,7 +34,7 @@ public class GPSTracker extends Service implements LocationListener {
 
     public GPSTracker(Context context){
         this.mContext = context;
-        getApplication();
+        getLocation();
     }
 
     public Location getLocation(){
@@ -52,7 +52,7 @@ public class GPSTracker extends Service implements LocationListener {
                             MIN_TIME_BW_UPDATES,
                             MIN_DISTANCE_CHANGE_FOR_UPDATE, this
                     );
-                    if(locationManager !== null) {
+                    if(locationManager != null) {
                         location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                         if(location!=null){
                             latitude = location.getLatitude();

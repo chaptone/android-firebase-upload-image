@@ -1,22 +1,32 @@
 package com.example.loginfirebase;
 
 import android.Manifest;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import static android.support.v4.content.PermissionChecker.PERMISSION_GRANTED;
 
 public class ViewLocation extends AppCompatActivity {
 
-    private Button getLocation;
+    private Button getLocation, stopGPS, startTimer;
     private static final int REQUEST_CODE_PERMISSION = 2;
     String mPermission = Manifest.permission.ACCESS_FINE_LOCATION;
+    private int counter;
 
     GPSTracker gps;
+
+    Handler h = new Handler();
+    Thread task;
+    private long startTime;
+    private String timeString;
+    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +42,10 @@ public class ViewLocation extends AppCompatActivity {
         }
 
         getLocation = findViewById(R.id.getLocation);
+        startTimer = findViewById(R.id.button4);
+        textView = findViewById(R.id.textView2);
+        stopGPS = findViewById(R.id.stopGps);
+
 
         getLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,10 +56,57 @@ public class ViewLocation extends AppCompatActivity {
                     double latitude = gps.getLatitude();
                     double longitude = gps.getLongitude();
 
-                    Toast.makeText(getApplicationContext(),"Current loation is \n Lat:" + latitude + "\nLong: " + longitude,
+                    Toast.makeText(getApplicationContext(),counter + "\nCurrent loation is \n Lat:" + latitude + "\nLong: " + longitude,
                             Toast.LENGTH_LONG).show();
+                }else {
+                    gps.showSettingAlert();
                 }
+                counter++;
             }
         });
+
+        stopGPS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopTime();
+                textView.setText("Timer Stop");
+            }
+        });
+
+        startTimer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("dddd", "djafhkodjshflakjd");
+                startTime();
+                counter = 1;
+            }
+        });
+    }
+
+    public void startTime() {
+        startTime = System.currentTimeMillis();
+        task = new Thread() {
+            @Override
+            public void run() {
+                super.run();
+
+                long millis = System.currentTimeMillis() - startTime;
+                long sec = millis / 1000 % 60;
+
+                timeString = String.format("%02d", sec);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        textView.setText(timeString);
+                    }
+                });
+                h.postDelayed(task, 1000);
+            }
+        };
+        h.postDelayed(task, 1000);
+    }
+
+    public void stopTime() {
+        h.removeCallbacks(task);
     }
 }
