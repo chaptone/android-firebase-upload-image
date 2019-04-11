@@ -19,6 +19,7 @@ public class ViewLocation extends AppCompatActivity {
     private static final int REQUEST_CODE_PERMISSION = 2;
     String mPermission = Manifest.permission.ACCESS_FINE_LOCATION;
     private int counter;
+    long sec = 0;
 
     GPSTracker gps;
 
@@ -76,8 +77,9 @@ public class ViewLocation extends AppCompatActivity {
         startTimer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("dddd", "djafhkodjshflakjd");
                 startTime();
+
+
                 counter = 1;
             }
         });
@@ -91,12 +93,26 @@ public class ViewLocation extends AppCompatActivity {
                 super.run();
 
                 long millis = System.currentTimeMillis() - startTime;
-                long sec = millis / 1000 % 60;
+                sec = millis / 1000 % 60;
 
                 timeString = String.format("%02d", sec);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        gps = new GPSTracker(ViewLocation.this);
+
+                        if(gps.canGetLocation()){
+                            double latitude = gps.getLatitude();
+                            double longitude = gps.getLongitude();
+
+                            if (sec%10 == 0) {
+                                Toast.makeText(getApplicationContext(),timeString + "\nCurrent location is \n Lat:" + latitude + "\nLong: " + longitude,
+                                        Toast.LENGTH_LONG).show();
+                            }
+
+                        }else {
+                            gps.showSettingAlert();
+                        }
                         textView.setText(timeString);
                     }
                 });
